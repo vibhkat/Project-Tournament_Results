@@ -1,4 +1,5 @@
 -- Creating the database 'tournament'.
+DROP DATABASE IF EXISTS tournament;
 CREATE DATABASE tournament;
 
 -- Connecting to the database 'tournament'.
