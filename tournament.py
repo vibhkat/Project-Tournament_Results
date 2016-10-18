@@ -51,7 +51,7 @@ def countPlayers():
     c.execute("SELECT count(*) from players")
     count = c.fetchone()
     conn.close()
-    return count[0][0]
+    return count[0]
 
 
 def registerPlayer(name):
@@ -82,25 +82,9 @@ def playerStandings():
     conn = connect()
     c = conn.cursor()
     
-    """Creating a view """
-    c.execute("CREATE VIEW subq1 as select players.id , scores.points as wins from players left join scores on players.id = scores.id")
-    conn.commit()
-    
-    """Creating a view """
-    c.execute("CREATE VIEW subq as select players.id , count(playerhistory.matchid) as matches from players left join playerhistory on players.id = playerhistory.id group by players.id")
-    conn.commit()
-    
     """Getting a list of tuples which contains (id, name, wins and number of matches). """
     c.execute("SELECT players.id , players.name , subq1.wins, subq.matches FROM players, subq, subq1 WHERE players.id = subq.id AND players.id=subq1.id ORDER BY subq1.wins DESC;")
     l = c.fetchall()
-    
-    """Dropping the view from the database"""
-    c.execute("DROP VIEW subq")
-    conn.commit()
-    
-    """Dropping the view from the database"""
-    c.execute("DROP VIEW subq1")
-    conn.commit()
     
     conn.close()
     return l
