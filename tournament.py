@@ -49,7 +49,7 @@ def countPlayers():
 
     """Counting the number of rows in the table 'players'. """
     c.execute("SELECT count(*) from players")
-    count = c.fetchall()
+    count = c.fetchone()
     conn.close()
     return count[0][0]
 
