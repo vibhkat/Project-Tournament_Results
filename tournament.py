@@ -17,10 +17,6 @@ def deleteMatches():
     conn = connect()
     c = conn.cursor()
     
-    """Removing all the match records from the table 'playerhistory'. """
-    c.execute("DELETE FROM playerhistory")
-    conn.commit()
-    
     """Removing all the match records from the table 'matches'. """
     c.execute("DELETE FROM matches")
    
@@ -102,19 +98,9 @@ def reportMatch(winner, loser):
     c = conn.cursor()
     
     """Inserting information regarding the match and the winner in the table 'matches'. """
-    c.execute("INSERT INTO matches(player1, player2, winner) values(%s, %s, %s)",(winner, loser, winner))
+    c.execute("INSERT INTO matches(winner, loser) values(%s, %s)",(winner, loser))
     conn.commit()
-    
-    """Getting the matchid from the 'match' table for the match inserted previoulsy. """
-    c.execute("SELECT matchid FROM matches WHERE player1=%s AND player2=%s AND winner=%s", (winner, loser, winner))
-    matchid = c.fetchall()
-    
-    """Inserting the matchid and the player ids in the table 'playerhistory' to record the matches played by the players. """
-    c.execute("INSERT INTO playerhistory(id, matchid) values(%s, %s)", (winner, matchid[0][0]))
-    conn.commit()
-    c.execute("INSERT INTO playerhistory(id, matchid) values(%s, %s)", (loser, matchid[0][0]))
-    conn.commit()
-    
+        
     conn.close()
     
  
